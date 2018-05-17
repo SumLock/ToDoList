@@ -1,0 +1,252 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+
+namespace BasicWpfNotepad
+{
+    /// <summary>
+    /// MainWindow.xaml 的互動邏輯
+    /// </summary>
+    public partial class MainWindow : Window
+    {
+        //定義儲存路徑
+        string FilePath = "";
+        //定義用作判斷儲存
+        string Savedtext = "";
+
+
+        public MainWindow()
+        {
+            InitializeComponent();
+        }
+
+        // 開啟檔案 Open
+        private void OpenBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (TextArea.Text != Savedtext)
+            {
+                if (MessageBox.Show("是否要儲存所做的變更?", "另存新檔", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                {
+                    Save();
+                    Open();
+                }
+                else
+                {
+                    Open();
+                }
+            }
+            else
+            {
+                Open();
+            }
+        }
+
+        // 另存新檔 Save As
+        private void SaveBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Save();
+            Savedtext = TextArea.Text;
+        }
+
+        // 快速存檔 Save
+        private void QuickSaveBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (Filename.Text == FilePath)
+            {
+                System.IO.File.WriteAllText(FilePath, TextArea.Text);
+                Savedtext = TextArea.Text;
+            }
+            else
+            {
+                Save();
+                Savedtext = TextArea.Text;
+            }
+
+        }
+
+        //開新檔案 New
+        private void NewBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (Savedtext != TextArea.Text)
+            {
+                if (MessageBox.Show("是否要儲存所做的變更?", "另存新檔", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                {
+                    Save();
+                }
+                else
+                {
+                    //設定案名為NEW 用作Save的判斷
+                    Filename.Text = "New";
+
+                    //清空文字方格
+                    TextArea.Text = "";
+
+                    //設定判斷是否儲存過的參考值
+                    Savedtext = TextArea.Text;
+                }
+            }
+            else
+            {
+                //設定案名為NEW 用作Save的判斷
+                Filename.Text = "New";
+
+                //清空文字方格
+                TextArea.Text = "";
+
+                //設定判斷是否儲存過的參考值
+                Savedtext = TextArea.Text;
+            }
+        }
+
+        //黑夜模式切換:白變灰
+        private void DarkmodeSwitch_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            //背景與字的顏色判斷
+            if (TextArea.Background == Brushes.White)
+            {
+                TextArea.Foreground = Brushes.White;
+                TextArea.Background = Brushes.Gray;
+            }
+        }
+
+        //黑夜模式切換:灰變白
+        private void WhitemodeSwitch_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (TextArea.Background == Brushes.Gray)
+            {
+                TextArea.Background = Brushes.White;
+                TextArea.Foreground = Brushes.Black;
+            }
+        }
+
+        //字型大小切換
+        private void FontSize12_Click(object sender, RoutedEventArgs e)
+        {
+            TextArea.FontSize = 12;
+        }
+
+        private void FontSize18_Click(object sender, RoutedEventArgs e)
+        {
+            TextArea.FontSize = 18;
+        }
+
+        private void FontSize24_Click(object sender, RoutedEventArgs e)
+        {
+            TextArea.FontSize = 24;
+        }
+
+        //從文字區塊儲存檔案 
+        void Save()
+        {
+            // 產生開啟檔案視窗 OpenFileDialog 
+            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
+
+            // 顯示視窗
+            Nullable<bool> result = dlg.ShowDialog();
+
+            // 當按下開啟之後的反應 
+            if (result == true)
+            {
+                // 取得檔案路徑 
+                FilePath = dlg.FileName;
+
+                // 儲存檔案
+                System.IO.File.WriteAllText(FilePath, TextArea.Text);
+
+                //判斷是否儲存過
+                Savedtext = TextArea.Text;
+
+                //是否需要另存
+                Filename.Text = FilePath;
+
+            }
+        }
+
+        //開啟檔案到文字區塊
+        void Open()
+        {
+            // 產生開啟檔案視窗 OpenFileDialog 
+            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+
+            // 顯示視窗
+            Nullable<bool> result = dlg.ShowDialog();
+
+            // 當按下開啟之後的反應 
+            if (result == true)
+            {
+                // 取得檔案路徑 
+                FilePath = dlg.FileName;
+
+                // 讀取檔案
+                TextArea.Text = System.IO.File.ReadAllText(FilePath);
+
+                //設定判斷是否儲存過的參考值
+                Savedtext = TextArea.Text;
+
+                //設定是否需要另存的判斷參考值
+                Filename.Text = FilePath;
+            }
+        }
+
+        //可移動視窗
+        private void TitleBar_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                this.DragMove();
+            }
+        }
+
+        //關閉視窗
+        private void StopButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (Savedtext != TextArea.Text)
+            {
+                if (MessageBox.Show("是否要儲存所做的變更?", "另存新檔", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                {
+                    Save();
+                    this.Close();
+                }
+                else
+                {
+                    this.Close();
+                }
+            }
+            else
+            {
+                this.Close();
+            }
+        }
+
+        //最大化
+        private void MaximumButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.WindowState != WindowState.Maximized)
+            {
+                this.WindowState = WindowState.Maximized;
+            }
+            else
+            {
+                this.WindowState = WindowState.Normal;
+            }
+        }
+
+        //最小化
+        private void MinimunButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.WindowState = WindowState.Minimized;
+        }
+
+    }
+}
