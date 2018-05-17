@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace BasicWpfNotepad
+namespace Notforget
 {
     /// <summary>
     /// App.xaml 的互動邏輯

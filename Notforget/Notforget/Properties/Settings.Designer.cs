@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BasicWpfNotepad.Properties
+namespace Notforget.Properties
 {
 
 

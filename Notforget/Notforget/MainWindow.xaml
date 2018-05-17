@@ -1,0 +1,39 @@
+﻿<Window x:Class="Notforget.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Notforget"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="500" Width="300">
+    <Grid>
+        <!--Grid-->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="50"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <!--ToDoList-->
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="1">
+            <StackPanel>
+            <StackPanel x:Name="ToDoList" >
+            </StackPanel>
+            <Button x:Name="AddBtn" Click="AddBtn_Click">Add</Button>
+        </StackPanel>
+        </ScrollViewer>
+
+        <!--SwitchButton-->
+        <TextBlock TextAlignment="Center" VerticalAlignment="Center">2018 / 05 / 18</TextBlock>
+        
+        <StackPanel Grid.Row="2" Orientation="Horizontal">
+            <Border >
+                <TextBlock x:Name="DateBlock" Width="150" FontSize="24" Background="White" Height="50" TextAlignment="Center" Padding="0,10,0,0" MouseLeftButtonDown="DateBlock_MouseLeftButtonDown" OpacityMask="Black" >Date</TextBlock>
+            </Border>
+            
+            <Border BorderBrush="Black" BorderThickness="1">
+            <TextBlock x:Name="TaskBlock" Width="150" FontSize="24" Background="Gray"  Height="50" TextAlignment="Center" Padding="0,10,0,0" MouseLeftButtonDown="TaskBlock_MouseLeftButtonDown"  >Task</TextBlock>
+            </Border>
+        </StackPanel>
+    </Grid>
+</Window>
